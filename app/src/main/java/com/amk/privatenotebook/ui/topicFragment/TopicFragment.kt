@@ -40,13 +40,8 @@ class TopicFragment : Fragment(R.layout.fragment_topic) {
         }
     }
 
-
     fun selectNone(note: Note) {
-
         subTopicViewModel?.selectNote(note)
     }
-//    companion object {
-//        @JvmStatic
-//        fun newInstance() = TopicFragment()
-//    }
+
 }

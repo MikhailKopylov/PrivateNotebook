@@ -7,18 +7,39 @@ object NotesRepositorySimple : NotesRepository {
         return privateNotes.toList()
     }
 
+    override fun updateNote(note: Note) {
+        privateNotes.find { it.uuidNote == note.uuidNote }?.let {
+            if (it == note) return
+            privateNotes.remove(it)
+        }
+        privateNotes.add(note)
+    }
+
+
     private fun initNotes(): MutableList<Note> {
-        return mutableListOf(
-            Note("TitleFirst", listOf(Subtopic("SubtitleFirst", "TextFirst"))),
-            Note("TitleSecond", listOf(Subtopic("SubtitleSecond", "TextSecond"))),
-            Note("TitleThird", listOf(Subtopic("SubtitleThird", "TextThird"))),
-            Note("TitleFourth", listOf(Subtopic("SubtitleFourth", "TextFourth"))),
-            Note("TitleFifth", listOf(Subtopic("SubtitleFifth", "TextFifth"))),
-            Note("TitleSixth", listOf(Subtopic("SubtitleSixth", "TextSixth"))),
-            Note("TitleSeventh", listOf(Subtopic("SubtitleSeventh", "TextSeventh"))),
-            Note("TitleEighth", listOf(Subtopic("SubtitleEighth", "TextEighth"))),
-            Note("TitleNinth", listOf(Subtopic("SubtitleNinth", "TextNinth"))),
+        val notesList = mutableListOf(
+            Note("TitleFirst"),
+            Note("TitleSecond"),
+            Note("TitleThird"),
+            Note("TitleFourth"),
+            Note("TitleFifth"),
+            Note("TitleSixth"),
+            Note("TitleSeventh"),
+            Note("TitleEighth"),
+            Note("TitleNinth"),
         )
+        notesList.forEach {
+            for (i in 1..3) {
+                it.addSubtopic(
+                    Subtopic(
+                        it,
+                        "${it.topicName} subtopic $i",
+                        "${it.topicName} body $i"
+                    )
+                )
+            }
+        }
+        return notesList
     }
 
 }

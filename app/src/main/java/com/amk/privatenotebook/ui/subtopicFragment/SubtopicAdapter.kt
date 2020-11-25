@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import kotlinx.android.synthetic.main.item_subtopic.view.*
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Subtopic> = object : DiffUtil.ItemCallback<Subtopic>() {
@@ -20,7 +21,8 @@ val DIFF_UTIL: DiffUtil.ItemCallback<Subtopic> = object : DiffUtil.ItemCallback<
 
 }
 
-class SubtopicAdapter : ListAdapter<Subtopic, SubtopicAdapter.SubtopicViewHolder>(DIFF_UTIL) {
+class SubtopicAdapter(val fragment: SubtopicFragment) :
+    ListAdapter<Subtopic, SubtopicAdapter.SubtopicViewHolder>(DIFF_UTIL) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubtopicViewHolder {
@@ -31,15 +33,27 @@ class SubtopicAdapter : ListAdapter<Subtopic, SubtopicAdapter.SubtopicViewHolder
         holder.bind(getItem(position))
     }
 
-
-    class SubtopicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+    inner class SubtopicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.item_subtopic, parent, false)
     ) {
 
         fun bind(item: Subtopic) {
             with(item) {
-                itemView.subtopic_textView.text = subtopicName
+                itemView.subtopic_edit_text.text = subtopicName
+                itemView.setOnClickListener {
+                    fragment.selectBody(item)
+                    runFragment()
+                }
             }
+        }
+
+        private fun runFragment() {
+            val activity = fragment.activity ?: return
+            activity.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, BodyFragment())
+                .addToBackStack("body")
+                .commit()
         }
     }
 

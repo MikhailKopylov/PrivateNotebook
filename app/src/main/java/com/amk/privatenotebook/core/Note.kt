@@ -5,12 +5,32 @@ import java.util.*
 
 data class Note(
     val topicName: String,
-    val subTopicList: List<Subtopic>,
     val uuidNote: UUID = UUID.randomUUID(),
-)
+) {
+    private val subTopicList: MutableList<Subtopic> = mutableListOf()
 
-data class Subtopic(
-    val subtopicName: String,
-    val text: String,
-    val uuidSubTopic: UUID = UUID.randomUUID(),
-)
+    fun addSubtopic(subtopic: Subtopic) {
+        subTopicList.add(subtopic)
+    }
+
+    fun updateSubtopic(newSubtopic: Subtopic) {
+        subTopicList.find { it.uuidSubTopic == newSubtopic.uuidSubTopic }?.let {
+            if(newSubtopic == it) return
+            subTopicList.remove(it)
+        }
+        subTopicList.add(newSubtopic)
+    }
+
+    fun getSubTopicList():List<Subtopic> = subTopicList.toList()
+
+    fun deleteSubtopic(subtopic: Subtopic){
+        subTopicList.remove(subtopic)
+    }
+}
+
+    data class Subtopic(
+        val note: Note,
+        val subtopicName: String = "",
+        val body: String = "",
+        val uuidSubTopic: UUID = UUID.randomUUID(),
+    )

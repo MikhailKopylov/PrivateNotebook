@@ -9,10 +9,10 @@ class SubtopicViewModel : ViewModel() {
     val subtopicList = MutableLiveData<SubtopicViewState>()
     fun selectNote(note: Note) {
         subtopicList.value =
-            if (note.subTopicList.isEmpty()) SubtopicViewState.EMPTY else SubtopicViewState.NotesList(
-                note.subTopicList
+            if (note.getSubTopicList()
+                    .isEmpty()
+            ) SubtopicViewState.EMPTY else SubtopicViewState.NotesList(
+                note
             )
     }
-
-
 }

@@ -7,16 +7,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
+import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.presentation.FromBodyViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
+import com.amk.privatenotebook.presentation.ToBodyViewModel
 import kotlinx.android.synthetic.main.fragment_subtopic.*
 
 
 class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
 
+    private lateinit var subtopicList: List<Subtopic>
+    private lateinit var note: Note
 
-    private val subTopicViewModel by lazy(LazyThreadSafetyMode.NONE) {
+    private val subtopicViewModel by lazy(LazyThreadSafetyMode.NONE) {
         activity?.let { ViewModelProvider(it).get(SubtopicViewModel::class.java) }
+    }
+
+    private val toBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        activity?.let { ViewModelProvider(it).get(ToBodyViewModel::class.java) }
+    }
+
+    private val fromBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        activity?.let { ViewModelProvider(it).get(FromBodyViewModel::class.java) }
     }
 
 
@@ -30,17 +44,26 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = SubtopicAdapter()
+        val adapter = SubtopicAdapter(this)
         subtopic_view.adapter = adapter
 
-
-        this.subTopicViewModel?.subtopicList?.observe(viewLifecycleOwner) {
+        subtopicViewModel?.subtopicList?.observe(viewLifecycleOwner) {
             when (it) {
                 is SubtopicViewState.NotesList -> {
-                    adapter.submitList(it.subtopics)
+                    note = it.note
+                    subtopicList = it.note.getSubTopicList()
+                    adapter.submitList(subtopicList)
                 }
                 SubtopicViewState.EMPTY -> Unit
             }
         }
+
+        fromBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
+            adapter.submitList(subtopicList)
+        }
+    }
+
+    fun selectBody(subtopic: Subtopic) {
+        toBodyViewModel?.selectBody(subtopic)
     }
 }
