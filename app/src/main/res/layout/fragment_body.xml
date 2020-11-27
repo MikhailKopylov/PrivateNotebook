@@ -15,8 +15,8 @@
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:gravity="start"
-        android:text="@string/blank_fragment_title"
         android:textSize="@dimen/medium_text"
+        android:tint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:background="@color/white"
         android:gravity="start"
         android:paddingTop="@dimen/medium_margin"
-        android:text="@string/blank_fragment_title"
+        android:tint="@string/note"
         android:textSize="@dimen/small_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

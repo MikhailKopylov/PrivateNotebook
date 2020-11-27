@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.NotesRepositorySimple
@@ -12,6 +13,7 @@ import com.amk.privatenotebook.presentation.TopicViewModel
 import com.amk.privatenotebook.presentation.TopicViewState
 import com.amk.privatenotebook.ui.dialogFragmens.AddNewHeaderDialog
 import com.amk.privatenotebook.ui.dialogFragmens.OnDialogListener
+import com.amk.privatenotebook.utils.hideFabOnScroll
 import kotlinx.android.synthetic.main.fragment_topic.*
 
 
@@ -57,9 +59,17 @@ class HeaderFragment : Fragment(R.layout.fragment_topic) {
 
         add_fab.setOnClickListener {
             val addNewHeaderDialog = AddNewHeaderDialog(onDialogListener)
-            activity?.supportFragmentManager?.let { addNewHeaderDialog.show(it, "Dialog add new header") }
+            activity?.supportFragmentManager?.let { addNewHeaderDialog.show(
+                it,
+                "Dialog add new header"
+            ) }
         }
+
+        hideFabOnScroll(topic_view, add_fab)
+
     }
+
+
 
     fun selectNone(note: Note) {
         subTopicViewModel?.selectNote(note)

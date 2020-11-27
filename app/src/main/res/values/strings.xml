@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Private Notebook</string>
-    <string name="blank_fragment_title">Hello blank fragment</string>
+    <string name="title">Title</string>
     <string name="topic">TOPIC</string>
+    <string name="note">Note</string>
     <string name="subtopic">SUBTOPIC</string>
     <string name="input_name_new_header">Input name new header</string>
     <string name="ok">OK</string>

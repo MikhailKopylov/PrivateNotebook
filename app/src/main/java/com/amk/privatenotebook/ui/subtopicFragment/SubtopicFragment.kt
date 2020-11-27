@@ -14,6 +14,7 @@ import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
 import com.amk.privatenotebook.presentation.ToBodyViewModel
 import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
+import com.amk.privatenotebook.utils.hideFabOnScroll
 import kotlinx.android.synthetic.main.fragment_subtopic.*
 import kotlinx.android.synthetic.main.fragment_subtopic.view.*
 
@@ -67,10 +68,12 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
             adapter.submitList(subtopicList)
         }
 
-        view.add_fab.setOnClickListener {
+        add_fab.setOnClickListener {
             toBodyViewModel?.selectBody(Subtopic(note = note, "", ""))
             runBodyFragment()
         }
+
+        hideFabOnScroll(subtopic_view, add_fab)
     }
 
     fun selectBody(subtopic: Subtopic) {
