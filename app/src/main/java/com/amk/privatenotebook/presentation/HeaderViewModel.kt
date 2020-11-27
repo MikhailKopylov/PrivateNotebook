@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.privatenotebook.core.NotesRepositorySimple
 
-class TopicViewModel : ViewModel() {
+class HeaderViewModel : ViewModel() {
 
-    private val topicViewStateLiveData = MutableLiveData<TopicViewState>(TopicViewState.EMPTY)
+    private val topicViewStateLiveData = MutableLiveData<HeaderViewState>(HeaderViewState.EMPTY)
 
     init {
         updateNoteList()
@@ -15,8 +15,8 @@ class TopicViewModel : ViewModel() {
 
     fun updateNoteList() {
         val noteList = NotesRepositorySimple.notes()
-        topicViewStateLiveData.value = TopicViewState.NotesList(noteList)
+        topicViewStateLiveData.value = HeaderViewState.NotesList(noteList)
     }
 
-    fun observableTopicViewState(): LiveData<TopicViewState> = topicViewStateLiveData
+    fun observableTopicViewState(): LiveData<HeaderViewState> = topicViewStateLiveData
 }

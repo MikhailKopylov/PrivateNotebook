@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.NotesRepositorySimple
+import com.amk.privatenotebook.presentation.HeaderViewModel
+import com.amk.privatenotebook.presentation.HeaderViewState
 import com.amk.privatenotebook.presentation.SubtopicViewModel
-import com.amk.privatenotebook.presentation.TopicViewModel
-import com.amk.privatenotebook.presentation.TopicViewState
 import com.amk.privatenotebook.ui.dialogFragmens.AddNewHeaderDialog
 import com.amk.privatenotebook.ui.dialogFragmens.OnDialogListener
 import com.amk.privatenotebook.utils.hideFabOnScroll
@@ -19,19 +18,19 @@ import kotlinx.android.synthetic.main.fragment_topic.*
 
 class HeaderFragment : Fragment(R.layout.fragment_topic) {
 
-    private lateinit var noteList:List<Note>
-    private val topicViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProvider(this).get(TopicViewModel::class.java)
+    private lateinit var noteList: List<Note>
+    private val headerViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        activity?.let { ViewModelProvider(it).get(HeaderViewModel::class.java) }
     }
 
     private val subTopicViewModel by lazy(LazyThreadSafetyMode.NONE) {
         activity?.let { ViewModelProvider(it).get(SubtopicViewModel::class.java) }
     }
 
-    private val onDialogListener:OnDialogListener = object : OnDialogListener{
+    private val onDialogListener: OnDialogListener = object : OnDialogListener {
         override fun onDialogOK(headerName: String) {
             NotesRepositorySimple.addNote(Note(headerName))
-            topicViewModel.updateNoteList()
+            headerViewModel?.updateNoteList()
         }
 
         override fun onDialogCancel() {
@@ -46,29 +45,30 @@ class HeaderFragment : Fragment(R.layout.fragment_topic) {
 
         topic_view.adapter = adapter
 
-        topicViewModel.observableTopicViewState().observe(viewLifecycleOwner) {
+        headerViewModel?.observableTopicViewState()?.observe(viewLifecycleOwner) {
             when (it) {
                 is
-                TopicViewState.NotesList -> {
+                HeaderViewState.NotesList -> {
                     noteList = it.notes
                     adapter.submitList(it.notes)
                 }
-                TopicViewState.EMPTY -> Unit
+                HeaderViewState.EMPTY -> Unit
             }
         }
 
         add_fab.setOnClickListener {
             val addNewHeaderDialog = AddNewHeaderDialog(onDialogListener)
-            activity?.supportFragmentManager?.let { addNewHeaderDialog.show(
-                it,
-                "Dialog add new header"
-            ) }
+            activity?.supportFragmentManager?.let {
+                addNewHeaderDialog.show(
+                    it,
+                    "Dialog add new header"
+                )
+            }
         }
 
         hideFabOnScroll(topic_view, add_fab)
 
     }
-
 
 
     fun selectNone(note: Note) {

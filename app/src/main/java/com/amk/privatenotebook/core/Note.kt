@@ -23,6 +23,10 @@ data class Note(
 
     fun getSubTopicList(): List<Subtopic> = subTopicList.toList()
 
+    fun addSubtopicList(subtopicList: List<Subtopic>) {
+        subTopicList.addAll(subtopicList)
+    }
+
     fun deleteSubtopic(subtopic: Subtopic) {
         subTopicList.remove(subtopic)
     }

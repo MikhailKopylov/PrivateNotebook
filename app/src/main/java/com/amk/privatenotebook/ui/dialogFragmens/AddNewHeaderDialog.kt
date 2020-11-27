@@ -9,7 +9,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_add_new_header.*
 import kotlinx.android.synthetic.main.dialog_add_new_header.view.*
 
-class AddNewHeaderDialog(private val onDialogListener: OnDialogListener) : BottomSheetDialogFragment() {
+class AddNewHeaderDialog(private val onDialogListener: OnDialogListener) :
+    BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,11 +21,14 @@ class AddNewHeaderDialog(private val onDialogListener: OnDialogListener) : Botto
         isCancelable = true
 
         view.ok_button.setOnClickListener {
-            onDialogListener.onDialogOK(addNewHeaderEditText.text.toString())
-            dismiss()
+            val newHeader = addNewHeaderEditText.text.toString()
+            if (newHeader.isNotEmpty()) {
+                onDialogListener.onDialogOK(newHeader)
+                dismiss()
+            }
         }
 
-        view.cancel_button.setOnClickListener{
+        view.cancel_button.setOnClickListener {
             dismiss()
         }
 

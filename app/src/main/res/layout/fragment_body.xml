@@ -13,10 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
         android:gravity="start"
         android:textSize="@dimen/medium_text"
-        android:tint="#FFFFFF"
+        android:inputType="textMultiLine"
+        android:hint="@string/subtopic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,14 +26,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
-        android:background="@color/white"
         android:gravity="start"
         android:paddingTop="@dimen/medium_margin"
-        android:tint="@string/note"
+        android:hint="@string/note"
+        android:inputType="textMultiLine"
         android:textSize="@dimen/small_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtopic_edit_text" />
+
+
 
 </LinearLayout>
