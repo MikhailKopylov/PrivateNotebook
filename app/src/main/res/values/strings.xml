@@ -3,4 +3,7 @@
     <string name="blank_fragment_title">Hello blank fragment</string>
     <string name="topic">TOPIC</string>
     <string name="subtopic">SUBTOPIC</string>
+    <string name="input_name_new_header">Input name new header</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

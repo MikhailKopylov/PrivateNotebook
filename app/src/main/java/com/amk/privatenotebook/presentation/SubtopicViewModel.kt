@@ -11,7 +11,7 @@ class SubtopicViewModel : ViewModel() {
         subtopicList.value =
             if (note.getSubTopicList()
                     .isEmpty()
-            ) SubtopicViewState.EMPTY else SubtopicViewState.NotesList(
+            ) SubtopicViewState.EMPTY(note) else SubtopicViewState.NotesList(
                 note
             )
     }

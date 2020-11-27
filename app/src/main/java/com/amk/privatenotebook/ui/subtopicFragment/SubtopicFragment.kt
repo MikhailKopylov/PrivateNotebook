@@ -13,7 +13,9 @@ import com.amk.privatenotebook.presentation.FromBodyViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
 import com.amk.privatenotebook.presentation.ToBodyViewModel
+import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import kotlinx.android.synthetic.main.fragment_subtopic.*
+import kotlinx.android.synthetic.main.fragment_subtopic.view.*
 
 
 class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
@@ -54,16 +56,33 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
                     subtopicList = it.note.getSubTopicList()
                     adapter.submitList(subtopicList)
                 }
-                SubtopicViewState.EMPTY -> Unit
+                is SubtopicViewState.EMPTY -> {
+                    note = it.note
+                    subtopicList = it.note.getSubTopicList()
+                }
             }
         }
 
         fromBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
             adapter.submitList(subtopicList)
         }
+
+        view.add_fab.setOnClickListener {
+            toBodyViewModel?.selectBody(Subtopic(note = note, "", ""))
+            runBodyFragment()
+        }
     }
 
     fun selectBody(subtopic: Subtopic) {
         toBodyViewModel?.selectBody(subtopic)
+    }
+
+    fun runBodyFragment() {
+//        val activity = fragment.activity ?: return
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.replace(R.id.container, BodyFragment())
+            ?.addToBackStack("body")
+            ?.commit()
     }
 }

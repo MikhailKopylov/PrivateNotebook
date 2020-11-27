@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
+import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.presentation.FromBodyViewModel
 import com.amk.privatenotebook.presentation.ToBodyViewModel
 import kotlinx.android.synthetic.main.fragment_body.*
 
 
 class BodyFragment : Fragment() {
+
+    private lateinit var note: Note
 
     private val toBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
         activity?.let { ViewModelProvider(it).get(ToBodyViewModel::class.java) }
@@ -33,6 +36,7 @@ class BodyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         toBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
+            note = it.note
             subtopic_edit_text.setText(it.subtopicName)
             body_edit_text.setText(it.body)
             fromBodyViewModel?.select(it)

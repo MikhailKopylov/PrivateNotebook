@@ -4,7 +4,7 @@ import java.util.*
 
 
 data class Note(
-    val topicName: String,
+    val headerName: String,
     val uuidNote: UUID = UUID.randomUUID(),
 ) {
     private val subTopicList: MutableList<Subtopic> = mutableListOf()
@@ -15,22 +15,22 @@ data class Note(
 
     fun updateSubtopic(newSubtopic: Subtopic) {
         subTopicList.find { it.uuidSubTopic == newSubtopic.uuidSubTopic }?.let {
-            if(newSubtopic == it) return
+            if (newSubtopic == it) return
             subTopicList.remove(it)
         }
         subTopicList.add(newSubtopic)
     }
 
-    fun getSubTopicList():List<Subtopic> = subTopicList.toList()
+    fun getSubTopicList(): List<Subtopic> = subTopicList.toList()
 
-    fun deleteSubtopic(subtopic: Subtopic){
+    fun deleteSubtopic(subtopic: Subtopic) {
         subTopicList.remove(subtopic)
     }
 }
 
-    data class Subtopic(
-        val note: Note,
-        val subtopicName: String = "",
-        val body: String = "",
-        val uuidSubTopic: UUID = UUID.randomUUID(),
-    )
+data class Subtopic(
+    val note: Note,
+    val subtopicName: String = "",
+    val body: String = "",
+    val uuidSubTopic: UUID = UUID.randomUUID(),
+)

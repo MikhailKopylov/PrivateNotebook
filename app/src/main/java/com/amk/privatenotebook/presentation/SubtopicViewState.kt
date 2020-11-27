@@ -4,5 +4,5 @@ import com.amk.privatenotebook.core.Note
 
 sealed class SubtopicViewState {
     data class NotesList(val note: Note) : SubtopicViewState()
-    object EMPTY : SubtopicViewState()
+    data class EMPTY(val note: Note) : SubtopicViewState()
 }

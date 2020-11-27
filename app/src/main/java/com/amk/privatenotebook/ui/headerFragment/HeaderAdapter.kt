@@ -1,4 +1,4 @@
-package com.amk.privatenotebook.ui.topicFragment
+package com.amk.privatenotebook.ui.headerFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,12 +16,12 @@ val DIFF_UTIL: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note
     }
 
     override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-        return oldItem.topicName == newItem.topicName
+        return oldItem.headerName == newItem.headerName
     }
 
 }
 
-class TopicAdapter(val fragment: TopicFragment) :
+class TopicAdapter(val fragment: HeaderFragment) :
     ListAdapter<Note, TopicAdapter.TopicViewHolder>(DIFF_UTIL) {
 
 
@@ -40,7 +40,7 @@ class TopicAdapter(val fragment: TopicFragment) :
 
         fun bind(item: Note) {
             with(item) {
-                itemView.topic_textView.text = topicName
+                itemView.topic_textView.text = headerName
                 itemView.setOnClickListener {
                     fragment.selectNone(item)
                     runFragment()
@@ -57,5 +57,6 @@ class TopicAdapter(val fragment: TopicFragment) :
                 .commit()
         }
     }
+
 
 }

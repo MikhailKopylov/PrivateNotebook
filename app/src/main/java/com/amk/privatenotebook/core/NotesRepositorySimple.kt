@@ -15,10 +15,18 @@ object NotesRepositorySimple : NotesRepository {
         privateNotes.add(note)
     }
 
+    override fun addNote(note: Note) {
+        privateNotes.add(note)
+    }
+
+    override fun deleteNote(note: Note) {
+        privateNotes.remove(note)
+    }
+
 
     private fun initNotes(): MutableList<Note> {
         val notesList = mutableListOf(
-            Note("TitleFirst"),
+            Note("Welcome in Private Notebook "),
             Note("TitleSecond"),
             Note("TitleThird"),
             Note("TitleFourth"),
@@ -33,8 +41,8 @@ object NotesRepositorySimple : NotesRepository {
                 it.addSubtopic(
                     Subtopic(
                         it,
-                        "${it.topicName} subtopic $i",
-                        "${it.topicName} body $i"
+                        "${it.headerName} subtopic $i",
+                        "${it.headerName} body $i"
                     )
                 )
             }

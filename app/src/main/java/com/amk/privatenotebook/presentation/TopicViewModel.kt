@@ -10,6 +10,10 @@ class TopicViewModel : ViewModel() {
     private val topicViewStateLiveData = MutableLiveData<TopicViewState>(TopicViewState.EMPTY)
 
     init {
+        updateNoteList()
+    }
+
+    fun updateNoteList() {
         val noteList = NotesRepositorySimple.notes()
         topicViewStateLiveData.value = TopicViewState.NotesList(noteList)
     }

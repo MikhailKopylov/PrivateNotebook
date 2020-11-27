@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Subtopic
-import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import kotlinx.android.synthetic.main.item_subtopic.view.*
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Subtopic> = object : DiffUtil.ItemCallback<Subtopic>() {
@@ -42,19 +41,12 @@ class SubtopicAdapter(val fragment: SubtopicFragment) :
                 itemView.subtopic_edit_text.text = subtopicName
                 itemView.setOnClickListener {
                     fragment.selectBody(item)
-                    runFragment()
+                    fragment.runBodyFragment()
                 }
             }
         }
 
-        private fun runFragment() {
-            val activity = fragment.activity ?: return
-            activity.supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, BodyFragment())
-                .addToBackStack("body")
-                .commit()
-        }
+
     }
 
 }
