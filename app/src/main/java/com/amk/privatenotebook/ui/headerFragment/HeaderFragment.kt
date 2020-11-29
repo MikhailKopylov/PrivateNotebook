@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.NotesRepositorySimple
+import com.amk.privatenotebook.core.NotesRepositoryRemote
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.HeaderViewState
 import com.amk.privatenotebook.presentation.SubtopicViewModel
@@ -29,8 +29,7 @@ class HeaderFragment : Fragment(R.layout.fragment_topic) {
 
     private val onDialogListener: OnDialogListener = object : OnDialogListener {
         override fun onDialogOK(headerName: String) {
-            NotesRepositorySimple.addNote(Note(headerName))
-            headerViewModel?.updateNoteList()
+            NotesRepositoryRemote.addNote(Note(headerName))
         }
 
         override fun onDialogCancel() {

@@ -1,22 +1,16 @@
 package com.amk.privatenotebook.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.amk.privatenotebook.core.NotesRepositorySimple
+import androidx.lifecycle.map
+import com.amk.privatenotebook.core.NotesRepositoryRemote
 
 class HeaderViewModel : ViewModel() {
 
-    private val topicViewStateLiveData = MutableLiveData<HeaderViewState>(HeaderViewState.EMPTY)
+    //TODO add Result.failure handling
 
-    init {
-        updateNoteList()
-    }
-
-    fun updateNoteList() {
-        val noteList = NotesRepositorySimple.notes()
-        topicViewStateLiveData.value = HeaderViewState.NotesList(noteList)
-    }
-
-    fun observableTopicViewState(): LiveData<HeaderViewState> = topicViewStateLiveData
+    fun observableTopicViewState(): LiveData<HeaderViewState> = NotesRepositoryRemote.notes()
+        .map {
+            if (it.isEmpty()) HeaderViewState.EMPTY else HeaderViewState.NotesList(it)
+        }
 }

@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.NotesRepositorySimple
+import com.amk.privatenotebook.core.NotesRepositoryRemote
 import com.amk.privatenotebook.core.Subtopic
-import com.amk.privatenotebook.presentation.*
+import com.amk.privatenotebook.presentation.BodyViewModel
+import com.amk.privatenotebook.presentation.SubtopicViewModel
+import com.amk.privatenotebook.presentation.SubtopicViewState
 import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import com.amk.privatenotebook.utils.hideFabOnScroll
 import kotlinx.android.synthetic.main.fragment_subtopic.*
@@ -21,21 +23,17 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     private lateinit var subtopicList: List<Subtopic>
     private lateinit var note: Note
 
-    private val headerViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(HeaderViewModel::class.java) }
-    }
-
     private val subtopicViewModel by lazy(LazyThreadSafetyMode.NONE) {
         activity?.let { ViewModelProvider(it).get(SubtopicViewModel::class.java) }
     }
 
     private val toBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(ToBodyViewModel::class.java) }
+        activity?.let { ViewModelProvider(it).get(BodyViewModel::class.java) }
     }
 
-    private val fromBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(FromBodyViewModel::class.java) }
-    }
+//    private val fromBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
+//        activity?.let { ViewModelProvider(it).get(FromBodyViewModel::class.java) }
+//    }
 
 
     override fun onCreateView(
@@ -59,7 +57,7 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
         initBodyObserver(adapter)
 
         add_fab.setOnClickListener {
-            toBodyViewModel?.selectBody(Subtopic(note = note, "", ""))
+            toBodyViewModel?.selectBody(Subtopic(noteID = note.uuidNote, "", ""))
             runBodyFragment()
         }
 
@@ -67,7 +65,7 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     }
 
     private fun initBodyObserver(adapter: SubtopicAdapter) {
-        fromBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
+        toBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
             adapter.submitList(subtopicList)
         }
     }
@@ -104,9 +102,9 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
         super.onPause()
         val newHeaderName = header_name_editView.text.toString()
         if (newHeaderName.isNotEmpty()) {
-            if (initNote()) {
-                NotesRepositorySimple.updateHeaderName(note, newHeaderName)
-                headerViewModel?.updateNoteList()
+            if (initNote() && note.headerName != newHeaderName) {
+                NotesRepositoryRemote.updateHeaderName(note, newHeaderName)
+//                headerViewModel?.updateNoteList()
             }
         }
     }

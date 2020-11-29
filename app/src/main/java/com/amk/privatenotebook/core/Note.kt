@@ -1,13 +1,16 @@
 package com.amk.privatenotebook.core
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-
+@Parcelize
 data class Note(
-    val headerName: String,
-    val uuidNote: UUID = UUID.randomUUID(),
-) {
+    var headerName: String = "",
+    val uuidNote: String = UUID.randomUUID().toString().replace("-", ""),
+    val lastChangesHeader: Date = Date(),
     private val subTopicList: MutableList<Subtopic> = mutableListOf()
+) : Parcelable {
 
     fun addSubtopic(subtopic: Subtopic) {
         subTopicList.add(subtopic)
@@ -32,9 +35,11 @@ data class Note(
     }
 }
 
+@Parcelize
 data class Subtopic(
-    val note: Note,
+    val noteID: String = "",
     val subtopicName: String = "",
     val body: String = "",
-    val uuidSubTopic: UUID = UUID.randomUUID(),
-)
+    val uuidSubTopic: String = UUID.randomUUID().toString().replace("-", ""),
+    val lastChangesHeader: Date = Date(),
+) : Parcelable
