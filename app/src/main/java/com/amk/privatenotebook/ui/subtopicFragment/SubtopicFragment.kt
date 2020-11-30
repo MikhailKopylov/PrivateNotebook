@@ -65,13 +65,13 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     }
 
     private fun initBodyObserver(adapter: SubtopicAdapter) {
-        toBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
+        toBodyViewModel?.subtopicLiveData()?.observe(viewLifecycleOwner) {
             adapter.submitList(subtopicList)
         }
     }
 
     private fun initSubtopicObserver(adapter: SubtopicAdapter) {
-        subtopicViewModel?.subtopicList?.observe(viewLifecycleOwner) {
+        subtopicViewModel?.subtopicList()?.observe(viewLifecycleOwner) {
             when (it) {
                 is SubtopicViewState.NotesList -> {
                     note = it.note
@@ -110,9 +110,9 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     }
 
     private fun initNote(): Boolean {
-        note = when (subtopicViewModel?.subtopicList?.value) {
-            is SubtopicViewState.NotesList -> (subtopicViewModel?.subtopicList?.value as SubtopicViewState.NotesList).note
-            is SubtopicViewState.EMPTY -> (subtopicViewModel?.subtopicList?.value as SubtopicViewState.EMPTY).note
+        note = when (subtopicViewModel?.subtopicList()?.value) {
+            is SubtopicViewState.NotesList -> (subtopicViewModel?.subtopicList()?.value as SubtopicViewState.NotesList).note
+            is SubtopicViewState.EMPTY -> (subtopicViewModel?.subtopicList()?.value as SubtopicViewState.EMPTY).note
             null -> return false
         }
         return true

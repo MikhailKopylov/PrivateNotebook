@@ -9,14 +9,16 @@ import com.amk.privatenotebook.core.Subtopic
 
 class BodyViewModel : ViewModel() {
 
-    val subtopicLiveData = MutableLiveData<Subtopic>()
+    private val subtopicLiveData = MutableLiveData<Subtopic>()
+
+    fun subtopicLiveData():LiveData<Subtopic> = subtopicLiveData
     fun selectBody(subtopic: Subtopic) {
         subtopicLiveData.value = subtopic
     }
 
     fun onUpdate(note: Note, subtopicName: String, body: String) {
         val noteID = note.uuidNote
-        val uuidSubtopic = subtopicLiveData.value?.uuidSubTopic ?: return
+        val uuidSubtopic = subtopicLiveData().value?.uuidSubTopic ?: return
         val subtopic = Subtopic(noteID, subtopicName, body, uuidSubtopic)
         subtopicLiveData.value = subtopic
         note.updateSubtopic(subtopic)
@@ -24,9 +26,11 @@ class BodyViewModel : ViewModel() {
     }
 
     fun getNoteById(): LiveData<Note> {
-        val noteID = subtopicLiveData.value?.noteID ?: ""
+        val noteID = subtopicLiveData().value?.noteID ?: ""
         return NotesRepositoryRemote.getNoteById(noteID)
     }
+
+
 
 
 }

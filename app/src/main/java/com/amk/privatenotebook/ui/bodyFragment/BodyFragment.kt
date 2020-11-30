@@ -33,7 +33,7 @@ class BodyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
+        toBodyViewModel?.subtopicLiveData()?.observe(viewLifecycleOwner) {
             if (it != null) {
 //                note = NotesRepositoryRemote.getNoteById(it.noteID)?:return@observe
                 subtopic_edit_text.setText(it.subtopicName)
