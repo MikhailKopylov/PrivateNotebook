@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1028656956756",
+    "firebase_url": "https://privatenotebook-126f8.firebaseio.com",
+    "project_id": "privatenotebook-126f8",
+    "storage_bucket": "privatenotebook-126f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028656956756:android:d09739888911fe081434c1",
+        "android_client_info": {
+          "package_name": "com.amk.privatenotebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028656956756-bjl6htpiuan0e3ib5u812medrrjlc0sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkxQbVw-ddGisdRxLVwZs2S_QujxdMUpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028656956756-bjl6htpiuan0e3ib5u812medrrjlc0sf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

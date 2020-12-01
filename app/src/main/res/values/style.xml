@@ -20,4 +20,15 @@
         <item name="android:layout_marginEnd">@dimen/small_margin</item>
         <item name="android:layout_marginTop">@dimen/medium_margin</item>
     </style>
+
+    <style name="AppTheme.DefaultFab" parent="Widget.Design.FloatingActionButton">
+        <item name="tint">@color/primary</item>
+        <item name="backgroundTint">@color/accent</item>
+        <item name="android:layout_margin">@dimen/large_margin</item>
+    </style>
+
+    <style name="AppTheme.DialogsFab" parent="AppTheme.DefaultFab">
+        <item name="tint">@color/accent</item>
+        <item name="backgroundTint">@color/primary</item>
+    </style>
 </resources>

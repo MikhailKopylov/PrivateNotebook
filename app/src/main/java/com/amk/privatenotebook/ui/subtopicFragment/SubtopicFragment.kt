@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.NotesRepositoryRemote
 import com.amk.privatenotebook.core.Subtopic
-import com.amk.privatenotebook.presentation.FromBodyViewModel
+import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
-import com.amk.privatenotebook.presentation.ToBodyViewModel
+import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
+import com.amk.privatenotebook.utils.hideFabOnScroll
 import kotlinx.android.synthetic.main.fragment_subtopic.*
 
 
@@ -26,12 +28,12 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
     }
 
     private val toBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(ToBodyViewModel::class.java) }
+        activity?.let { ViewModelProvider(it).get(BodyViewModel::class.java) }
     }
 
-    private val fromBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(FromBodyViewModel::class.java) }
-    }
+//    private val fromBodyViewModel by lazy(LazyThreadSafetyMode.NONE) {
+//        activity?.let { ViewModelProvider(it).get(FromBodyViewModel::class.java) }
+//    }
 
 
     override fun onCreateView(
@@ -47,23 +49,72 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
         val adapter = SubtopicAdapter(this)
         subtopic_view.adapter = adapter
 
-        subtopicViewModel?.subtopicList?.observe(viewLifecycleOwner) {
+        if (initNote()) {
+            header_name_editView.setText(note.headerName)
+        }
+        initSubtopicObserver(adapter)
+
+        initBodyObserver(adapter)
+
+        add_fab.setOnClickListener {
+            toBodyViewModel?.selectBody(Subtopic(noteID = note.uuidNote, "", ""))
+            runBodyFragment()
+        }
+
+        hideFabOnScroll(subtopic_view, add_fab)
+    }
+
+    private fun initBodyObserver(adapter: SubtopicAdapter) {
+        toBodyViewModel?.subtopicLiveData()?.observe(viewLifecycleOwner) {
+            adapter.submitList(subtopicList)
+        }
+    }
+
+    private fun initSubtopicObserver(adapter: SubtopicAdapter) {
+        subtopicViewModel?.subtopicList()?.observe(viewLifecycleOwner) {
             when (it) {
                 is SubtopicViewState.NotesList -> {
                     note = it.note
                     subtopicList = it.note.getSubTopicList()
                     adapter.submitList(subtopicList)
                 }
-                SubtopicViewState.EMPTY -> Unit
+                is SubtopicViewState.EMPTY -> {
+                    note = it.note
+                    subtopicList = it.note.getSubTopicList()
+                }
             }
-        }
-
-        fromBodyViewModel?.subtopicLiveData?.observe(viewLifecycleOwner) {
-            adapter.submitList(subtopicList)
         }
     }
 
     fun selectBody(subtopic: Subtopic) {
         toBodyViewModel?.selectBody(subtopic)
+    }
+
+    fun runBodyFragment() {
+        activity?.supportFragmentManager
+            ?.beginTransaction()
+            ?.replace(R.id.container, BodyFragment())
+            ?.addToBackStack("body")
+            ?.commit()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val newHeaderName = header_name_editView.text.toString()
+        if (newHeaderName.isNotEmpty()) {
+            if (initNote() && note.headerName != newHeaderName) {
+                NotesRepositoryRemote.updateHeaderName(note, newHeaderName)
+//                headerViewModel?.updateNoteList()
+            }
+        }
+    }
+
+    private fun initNote(): Boolean {
+        note = when (subtopicViewModel?.subtopicList()?.value) {
+            is SubtopicViewState.NotesList -> (subtopicViewModel?.subtopicList()?.value as SubtopicViewState.NotesList).note
+            is SubtopicViewState.EMPTY -> (subtopicViewModel?.subtopicList()?.value as SubtopicViewState.EMPTY).note
+            null -> return false
+        }
+        return true
     }
 }
