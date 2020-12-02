@@ -43,31 +43,28 @@ class FireStoreProvider : RemoteDataProvider {
         isNotSubscribeOnDbChange = false
     }
 
-    override fun getNoteById(id: String): LiveData<Note> {
-        val result = MutableLiveData<Note>()
-
+    override fun getNoteById(id: String): LiveData<Note> = MutableLiveData<Note>().apply {
         notesReference.document(id)
-            .get()
-            .addOnSuccessListener {
-                result.value =
-                    it.toObject(Note::class.java)
-            }.addOnFailureListener {
-                result.value = null
-            }
-        return result
+                .get()
+                .addOnSuccessListener {
+                    value =
+                            it.toObject(Note::class.java)
+                }.addOnFailureListener {
+                    value = null
+                }
+
     }
 
-    override fun saveOrUpdateNote(note: Note): LiveData<Result<Note>> {
-        val result = MutableLiveData<Result<Note>>()
-
+    override fun saveOrUpdateNote(note: Note): LiveData<Result<Note>> = MutableLiveData<Result<Note>>().apply {
         notesReference.document(note.uuidNote)
-            .set(note).addOnSuccessListener {
-                Log.d(TAG, "Note $note is saved")
-                result.value = Result.success(note)
-            }.addOnFailureListener {
-                Log.d(TAG, "Error saving note $note, message: ${it.message}")
-                result.value = Result.failure(it)
-            }
-        return result
+                .set(note).addOnSuccessListener {
+                    Log.d(TAG, "Note $note is saved")
+                    value = Result.success(note)
+                }.addOnFailureListener {
+                    Log.d(TAG, "Error saving note $note, message: ${it.message}")
+                    value = Result.failure(it)
+                }
     }
+
+
 }

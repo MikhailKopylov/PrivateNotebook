@@ -3,7 +3,7 @@ package com.amk.privatenotebook.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.amk.privatenotebook.core.NotesRepositoryRemote
+import com.amk.privatenotebook.core.note.NotesRepositoryRemote
 
 class HeaderViewModel : ViewModel() {
 

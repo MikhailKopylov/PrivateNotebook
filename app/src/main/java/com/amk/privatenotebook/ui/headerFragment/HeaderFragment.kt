@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.NotesRepositoryRemote
+import com.amk.privatenotebook.core.note.NotesRepositoryRemote
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.HeaderViewState
 import com.amk.privatenotebook.presentation.SubtopicViewModel

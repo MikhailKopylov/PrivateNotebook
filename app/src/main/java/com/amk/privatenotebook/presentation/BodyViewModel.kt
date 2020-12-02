@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.NotesRepositoryRemote
+import com.amk.privatenotebook.core.note.NotesRepositoryRemote
 import com.amk.privatenotebook.core.Subtopic
 
 class BodyViewModel : ViewModel() {

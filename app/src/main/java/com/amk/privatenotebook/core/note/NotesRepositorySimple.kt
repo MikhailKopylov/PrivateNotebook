@@ -1,7 +1,8 @@
-package com.amk.privatenotebook.core
+package com.amk.privatenotebook.core.note
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.amk.privatenotebook.core.Note
 
 
 object NotesRepositorySimple : NotesRepository {
