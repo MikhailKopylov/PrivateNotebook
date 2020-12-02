@@ -1,4 +1,4 @@
 package com.amk.privatenotebook.exeptions
 
-class NoAuthException : Throwable() {
+class ErrorLoadingListNotes : Throwable() {
 }

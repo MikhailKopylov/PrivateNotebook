@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote
 import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
 import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
@@ -103,7 +103,7 @@ class SubtopicFragment : Fragment(R.layout.fragment_subtopic) {
         val newHeaderName = header_name_editView.text.toString()
         if (newHeaderName.isNotEmpty()) {
             if (initNote() && note.headerName != newHeaderName) {
-                NotesRepositoryRemote.updateHeaderName(note, newHeaderName)
+                notesRepository.updateHeaderName(note, newHeaderName)
 //                headerViewModel?.updateNoteList()
             }
         }

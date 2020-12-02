@@ -2,8 +2,9 @@ package com.amk.privatenotebook.core.note
 
 import androidx.lifecycle.LiveData
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.database.interfaces.RemoteUser
 
-interface NotesRepository {
+interface NotesRepository : RemoteUser {
 
     fun notes(): LiveData<List<Note>>
     fun updateNote(note: Note): LiveData<Result<Note>>
@@ -11,4 +12,6 @@ interface NotesRepository {
     fun addNote(note: Note): LiveData<Result<Note>>
     fun getNoteById(id: String): LiveData<Note>
     fun deleteNote(note: Note)
+
+
 }

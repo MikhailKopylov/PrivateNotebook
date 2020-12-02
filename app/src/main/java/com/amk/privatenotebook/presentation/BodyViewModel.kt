@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote
 import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
 
 class BodyViewModel : ViewModel() {
 
     private val subtopicLiveData = MutableLiveData<Subtopic>()
 
-    fun subtopicLiveData():LiveData<Subtopic> = subtopicLiveData
+    fun subtopicLiveData(): LiveData<Subtopic> = subtopicLiveData
     fun selectBody(subtopic: Subtopic) {
         subtopicLiveData.value = subtopic
     }
@@ -22,15 +22,13 @@ class BodyViewModel : ViewModel() {
         val subtopic = Subtopic(noteID, subtopicName, body, uuidSubtopic)
         subtopicLiveData.value = subtopic
         note.updateSubtopic(subtopic)
-        NotesRepositoryRemote.updateNote(note)
+        notesRepository.updateNote(note)
     }
 
     fun getNoteById(): LiveData<Note> {
         val noteID = subtopicLiveData().value?.noteID ?: ""
-        return NotesRepositoryRemote.getNoteById(noteID)
+        return notesRepository.getNoteById(noteID)
     }
-
-
 
 
 }

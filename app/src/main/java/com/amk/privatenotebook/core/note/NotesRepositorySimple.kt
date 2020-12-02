@@ -3,6 +3,7 @@ package com.amk.privatenotebook.core.note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.user.User
 
 
 object NotesRepositorySimple : NotesRepository {
@@ -57,6 +58,10 @@ object NotesRepositorySimple : NotesRepository {
 
     override fun deleteNote(note: Note) {
         privateNotes.remove(note)
+    }
+
+    override fun getCurrentUser(): LiveData<User?> {
+        TODO("Not yet implemented")
     }
 
 

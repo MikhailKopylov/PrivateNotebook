@@ -7,6 +7,8 @@ import com.amk.privatenotebook.core.database.provider.FireStoreProvider
 
 
 object NotesRepositoryRemote : NotesRepository {
+
+    val notesRepository: NotesRepository by lazy { NotesRepositoryRemote }
     private val TAG = "${NotesRepositoryRemote::class.java.simpleName} :"
 
     private val remoteDataProvider = FireStoreProvider()
@@ -35,4 +37,6 @@ object NotesRepositoryRemote : NotesRepository {
     override fun deleteNote(note: Note) {
         TODO("Not yet implemented")
     }
+
+    override fun getCurrentUser() = remoteDataProvider.getCurrentUser()
 }
