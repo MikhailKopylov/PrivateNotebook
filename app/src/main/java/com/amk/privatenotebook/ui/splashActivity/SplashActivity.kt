@@ -12,7 +12,7 @@ import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
 import com.amk.privatenotebook.exeptions.NoAuthException
 import com.amk.privatenotebook.presentation.SplashViewModel
 import com.amk.privatenotebook.presentation.SplashViewState
-import com.amk.privatenotebook.ui.MainActivity
+import com.amk.privatenotebook.ui.mainActivity.MainActivity
 import com.firebase.ui.auth.AuthUI
 
 private const val RC_SIGN_IN = 458
