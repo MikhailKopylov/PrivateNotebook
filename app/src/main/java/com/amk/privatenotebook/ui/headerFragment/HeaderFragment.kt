@@ -35,7 +35,7 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
 
     private val onDialogListener: OnDialogListener = object : OnDialogListener {
         override fun onDialogOK(headerName: String) {
-            notesRepository.addNote(Note(headerName))
+            headerViewModel?.addNote(Note(headerName))
         }
 
         override fun onDialogCancel() {

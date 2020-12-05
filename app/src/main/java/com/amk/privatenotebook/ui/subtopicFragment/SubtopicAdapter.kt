@@ -5,9 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Subtopic
-import kotlinx.android.synthetic.main.item_subtopic.view.*
+import com.amk.privatenotebook.databinding.ItemSubtopicBinding
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Subtopic> = object : DiffUtil.ItemCallback<Subtopic>() {
     override fun areItemsTheSame(oldItem: Subtopic, newItem: Subtopic): Boolean {
@@ -32,14 +31,19 @@ class SubtopicAdapter(val fragment: SubtopicFragment) :
         holder.bind(getItem(position))
     }
 
-    inner class SubtopicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_subtopic, parent, false)
+    inner class SubtopicViewHolder(
+        parent: ViewGroup,
+        private val binding: ItemSubtopicBinding = ItemSubtopicBinding.inflate(
+            LayoutInflater.from(parent.context)
+        )
+    ) : RecyclerView.ViewHolder(
+        binding.root
     ) {
 
         fun bind(item: Subtopic) {
             with(item) {
-                itemView.subtopic_edit_text.text = subtopicName
-                itemView.setOnClickListener {
+                binding.subtopicEditText.text = subtopicName
+                binding.root.setOnClickListener {
                     fragment.selectBody(item)
                     fragment.runBodyFragment()
                 }

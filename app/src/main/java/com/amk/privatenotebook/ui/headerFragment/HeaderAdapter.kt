@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.databinding.ItemTopicBinding
 import com.amk.privatenotebook.ui.subtopicFragment.SubtopicFragment
-import kotlinx.android.synthetic.main.item_topic.view.*
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note>() {
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -34,14 +34,17 @@ class TopicAdapter(val fragment: HeaderFragment) :
     }
 
 
-    inner class TopicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_topic, parent, false)
-    ) {
+    inner class TopicViewHolder(
+        parent: ViewGroup,
+        private val binding: ItemTopicBinding = ItemTopicBinding.inflate(
+            LayoutInflater.from(parent.context)
+        )
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Note) {
             with(item) {
-                itemView.topic_textView.text = headerName
-                itemView.setOnClickListener {
+                binding.topicTextView.text = headerName
+                binding.root.setOnClickListener {
                     fragment.selectNone(item)
                     runFragment()
                 }
