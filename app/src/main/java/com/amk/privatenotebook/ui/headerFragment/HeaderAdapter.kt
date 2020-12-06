@@ -46,16 +46,16 @@ class TopicAdapter(val fragment: HeaderFragment) :
                 binding.topicTextView.text = headerName
                 binding.root.setOnClickListener {
                     fragment.selectNone(item)
-                    runFragment()
+                    runFragment(item)
                 }
             }
         }
 
-        private fun runFragment() {
+        private fun runFragment(note:Note) {
             val activity = fragment.activity ?: return
             activity.supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, SubtopicFragment())
+                .replace(R.id.container, SubtopicFragment(note))
                 .addToBackStack("subtitle")
                 .commit()
         }

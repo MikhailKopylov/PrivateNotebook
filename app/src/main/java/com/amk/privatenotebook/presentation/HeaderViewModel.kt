@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote.addNote
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
+import com.amk.privatenotebook.core.note.NotesRepository
 
-class HeaderViewModel : ViewModel() {
+class HeaderViewModel(private val notesRepository: NotesRepository) : ViewModel() {
 
     //TODO add Result.failure handling
 
@@ -17,7 +15,8 @@ class HeaderViewModel : ViewModel() {
             if (it.isEmpty()) HeaderViewState.EMPTY else HeaderViewState.NotesList(it)
         }
 
-    fun addNote(note: Note){
-        NotesRepositoryRemote.addNote(note)
+    fun addNote(note: Note) {
+        notesRepository.addNote(note)
     }
+
 }

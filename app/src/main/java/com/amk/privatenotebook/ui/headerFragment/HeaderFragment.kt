@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
 import com.amk.privatenotebook.databinding.FragmentHeaderBinding
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.HeaderViewState
@@ -16,6 +15,7 @@ import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.ui.dialogFragmens.AddNewHeaderDialog
 import com.amk.privatenotebook.ui.dialogFragmens.OnDialogListener
 import com.amk.privatenotebook.utils.hideFabOnScroll
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HeaderFragment : Fragment(R.layout.fragment_header) {
@@ -25,17 +25,12 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
     private var _binding: FragmentHeaderBinding? = null
     private val binding: FragmentHeaderBinding get() = _binding!!
 
-    private val headerViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(HeaderViewModel::class.java) }
-    }
-
-    private val subTopicViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        activity?.let { ViewModelProvider(it).get(SubtopicViewModel::class.java) }
-    }
+    private val headerViewModel by viewModel<HeaderViewModel>()
+    private val subTopicViewModel by viewModel<SubtopicViewModel>()
 
     private val onDialogListener: OnDialogListener = object : OnDialogListener {
         override fun onDialogOK(headerName: String) {
-            headerViewModel?.addNote(Note(headerName))
+            headerViewModel.addNote(Note(headerName))
         }
 
         override fun onDialogCancel() {
@@ -56,9 +51,9 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
 
         val adapter = TopicAdapter(this)
 
-        with(binding){
+        with(binding) {
             topicView.adapter = adapter
-            headerViewModel?.observableTopicViewState()?.observe(viewLifecycleOwner) {
+            headerViewModel.observableTopicViewState().observe(viewLifecycleOwner) {
                 when (it) {
                     is
                     HeaderViewState.NotesList -> {
@@ -85,7 +80,7 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
 
 
     fun selectNone(note: Note) {
-        subTopicViewModel?.selectNote(note)
+        subTopicViewModel.selectNote(note)
     }
 
     override fun onDestroyView() {

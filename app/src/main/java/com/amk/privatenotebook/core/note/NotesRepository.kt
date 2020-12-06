@@ -2,9 +2,9 @@ package com.amk.privatenotebook.core.note
 
 import androidx.lifecycle.LiveData
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.database.interfaces.RemoteUser
+import com.amk.privatenotebook.core.database.interfaces.UserDAO
 
-interface NotesRepository : RemoteUser {
+interface NotesRepository : UserDAO {
 
     fun notes(): LiveData<List<Note>>
     fun updateNote(note: Note): LiveData<Result<Note>>

@@ -6,7 +6,7 @@ import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.user.User
 
 
-object NotesRepositorySimple : NotesRepository {
+class NotesRepositorySimple : NotesRepository {
     private val privateNotes: MutableList<Note> = initNotes()
 
     override fun notes(): LiveData<List<Note>> {

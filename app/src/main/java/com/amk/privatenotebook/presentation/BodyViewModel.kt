@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.Subtopic
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
+import com.amk.privatenotebook.core.note.NotesRepository
 
-class BodyViewModel : ViewModel() {
+class BodyViewModel(private val notesRepository: NotesRepository) : ViewModel() {
 
     private val subtopicLiveData = MutableLiveData<Subtopic>()
 

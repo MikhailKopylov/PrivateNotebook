@@ -1,10 +1,10 @@
-package com.amk.privatenotebook.core.database.provider
+package com.amk.privatenotebook.core.database.providers
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.database.interfaces.RemoteDataProvider
+import com.amk.privatenotebook.core.database.interfaces.DataProvider
 import com.amk.privatenotebook.core.user.User
 import com.amk.privatenotebook.exeptions.ErrorLoadingListNotes
 import com.amk.privatenotebook.exeptions.NoAuthException
@@ -15,7 +15,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 private const val NOTES_COLLECTION = "notes_collection"
 private const val USERS_COLLECTION = "users_collection"
 
-class FireStoreProvider : RemoteDataProvider {
+class FireStoreProvider() : DataProvider {
 
     private val TAG = "${FireStoreProvider::class.java.simpleName} :"
 

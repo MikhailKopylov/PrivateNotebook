@@ -3,6 +3,6 @@ package com.amk.privatenotebook.core.database.interfaces
 import androidx.lifecycle.LiveData
 import com.amk.privatenotebook.core.user.User
 
-interface RemoteUser {
+interface UserDAO {
     fun getCurrentUser(): LiveData<User?>
 }
