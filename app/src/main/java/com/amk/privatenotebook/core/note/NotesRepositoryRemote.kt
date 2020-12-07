@@ -3,8 +3,8 @@ package com.amk.privatenotebook.core.note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.database.interfaces.DataProvider
-import com.amk.privatenotebook.core.database.providers.FireStoreProvider
 
 
 class NotesRepositoryRemote(private val dataProvider: DataProvider) : NotesRepository {
@@ -32,9 +32,13 @@ class NotesRepositoryRemote(private val dataProvider: DataProvider) : NotesRepos
         MutableLiveData(dataProvider.getAllNotes().value?.find { it.uuidNote == id })
 
 
-    override fun deleteNote(note: Note) {
-        TODO("Not yet implemented")
-    }
+    override fun deleteNote(note: Note): LiveData<Boolean> =
+        dataProvider.deleteNote(note.uuidNote)
+
+    override fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean> =
+        dataProvider.deleteSubtopic(noteID, subtopic)
+
+
 
     override fun getCurrentUser() = dataProvider.getCurrentUser()
 }

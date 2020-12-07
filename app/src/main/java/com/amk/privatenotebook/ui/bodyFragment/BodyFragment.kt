@@ -12,8 +12,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BodyFragment : Fragment() {
 
-//    private val toBodyViewModel by (activity)?.viewModel<BodyViewModel>() ?: viewModel()
-
     private var _binding: FragmentBodyBinding? = null
     private val binding: FragmentBodyBinding get() = _binding!!
 

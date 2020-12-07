@@ -8,6 +8,9 @@ import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.SplashViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
+import com.amk.privatenotebook.ui.ItemTouchHelperAdapter
+import com.amk.privatenotebook.ui.headerFragment.HeaderFragment
+import com.amk.privatenotebook.ui.headerFragment.TopicAdapter
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.bind
@@ -24,12 +27,12 @@ object DependencyGraph {
 
     private val viewModelModule by lazy {
         module {
-            viewModel { BodyViewModel(get())}
+            viewModel { BodyViewModel(get()) }
             viewModel { HeaderViewModel(get()) }
             viewModel { SplashViewModel(get()) }
-            viewModel { SubtopicViewModel() }
+            viewModel { SubtopicViewModel(get()) }
         }
     }
 
-    val modules:List<Module> = listOf(repositoryModule, viewModelModule)
+    val modules: List<Module> = listOf(repositoryModule, viewModelModule)
 }

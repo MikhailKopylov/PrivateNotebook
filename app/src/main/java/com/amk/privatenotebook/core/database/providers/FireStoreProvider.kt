@@ -3,7 +3,9 @@ package com.amk.privatenotebook.core.database.providers
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.database.interfaces.DataProvider
 import com.amk.privatenotebook.core.user.User
 import com.amk.privatenotebook.exeptions.ErrorLoadingListNotes
@@ -15,12 +17,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 private const val NOTES_COLLECTION = "notes_collection"
 private const val USERS_COLLECTION = "users_collection"
 
-class FireStoreProvider() : DataProvider {
+class FireStoreProvider : DataProvider {
 
     private val TAG = "${FireStoreProvider::class.java.simpleName} :"
 
     private val db = FirebaseFirestore.getInstance()
-    private val notesReference = db.collection(NOTES_COLLECTION)
     private val result = MutableLiveData<List<Note>>()
 
     private val currentUser
@@ -56,7 +57,7 @@ class FireStoreProvider() : DataProvider {
         isNotSubscribeOnDbChange = false
     }
 
-    override fun getNoteById(id: String): LiveData<Note> = MutableLiveData<Note>().apply {
+    private fun getNoteById(id: String): MutableLiveData<Note> = MutableLiveData<Note>().apply {
 
         getUserNotesCollection().document(id)
             .get()
@@ -84,6 +85,28 @@ class FireStoreProvider() : DataProvider {
                 value = Result.failure(e)
             }
         }
+
+    override fun deleteNote(id: String): LiveData<Boolean> =
+        MutableLiveData<Boolean>().apply {
+            try {
+                getUserNotesCollection().document(id)
+                    .delete().addOnSuccessListener {
+                        value = true
+                    }.addOnFailureListener {
+                        throw it
+                    }
+            } catch (e: Throwable) {
+                value = false
+            }
+        }
+
+    override fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean> =
+        MutableLiveData<Boolean>().apply {
+            val note = result.value?.find { it.uuidNote == noteID } ?: return@apply
+            note.deleteSubtopic(subtopic)
+            saveOrUpdateNote(note).map { it.isSuccess }
+        }
+
 
     override fun getCurrentUser(): LiveData<User?> =
         MutableLiveData<User?>().apply {

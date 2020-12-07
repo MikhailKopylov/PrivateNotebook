@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.databinding.FragmentHeaderBinding
+import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.HeaderViewState
 import com.amk.privatenotebook.presentation.SubtopicViewModel
+import com.amk.privatenotebook.ui.ItemTouchHelperCallback
 import com.amk.privatenotebook.ui.dialogFragmens.AddNewHeaderDialog
 import com.amk.privatenotebook.ui.dialogFragmens.OnDialogListener
 import com.amk.privatenotebook.utils.hideFabOnScroll
@@ -25,11 +28,9 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
     private var _binding: FragmentHeaderBinding? = null
     private val binding: FragmentHeaderBinding get() = _binding!!
 
-    private val headerViewModel by viewModel<HeaderViewModel>()
-    private val subTopicViewModel by viewModel<SubtopicViewModel>()
-
     private val onDialogListener: OnDialogListener = object : OnDialogListener {
         override fun onDialogOK(headerName: String) {
+            val headerViewModel by (activity)?.viewModel<HeaderViewModel>() ?: viewModel()
             headerViewModel.addNote(Note(headerName))
         }
 
@@ -53,6 +54,8 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
 
         with(binding) {
             topicView.adapter = adapter
+            ItemTouchHelper(ItemTouchHelperCallback(adapter)).attachToRecyclerView(topicView)
+            val headerViewModel by (activity)?.viewModel<HeaderViewModel>() ?: viewModel()
             headerViewModel.observableTopicViewState().observe(viewLifecycleOwner) {
                 when (it) {
                     is
@@ -79,12 +82,19 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
     }
 
 
-    fun selectNone(note: Note) {
-        subTopicViewModel.selectNote(note)
+    fun selectNote(note: Note) {
+        val subTopicViewModel by activity?.viewModel<SubtopicViewModel>() ?: viewModel()
+        subTopicViewModel.selectNote(note.uuidNote)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    fun onNoteDelete(note: Note): LiveData<Boolean> {
+        val headerViewModel by (activity)?.viewModel<HeaderViewModel>() ?: viewModel()
+        return headerViewModel.deleteNote(note)
+    }
+
 }

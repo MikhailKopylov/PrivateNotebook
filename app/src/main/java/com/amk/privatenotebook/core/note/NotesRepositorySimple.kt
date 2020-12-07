@@ -3,6 +3,7 @@ package com.amk.privatenotebook.core.note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.user.User
 
 
@@ -56,9 +57,15 @@ class NotesRepositorySimple : NotesRepository {
     }
 
 
-    override fun deleteNote(note: Note) {
-        privateNotes.remove(note)
-    }
+    override fun deleteNote(note: Note): LiveData<Boolean> =
+        MutableLiveData<Boolean>().apply {
+            value = privateNotes.remove(note)
+        }
+
+    override fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean> =
+        MutableLiveData<Boolean>().apply { privateNotes.find { (it.uuidNote == noteID) }?.deleteSubtopic(subtopic)}
+
+
 
     override fun getCurrentUser(): LiveData<User?> {
         TODO("Not yet implemented")

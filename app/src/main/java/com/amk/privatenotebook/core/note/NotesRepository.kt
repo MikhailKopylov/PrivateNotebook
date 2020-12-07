@@ -2,6 +2,7 @@ package com.amk.privatenotebook.core.note
 
 import androidx.lifecycle.LiveData
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.database.interfaces.UserDAO
 
 interface NotesRepository : UserDAO {
@@ -11,7 +12,7 @@ interface NotesRepository : UserDAO {
     fun updateHeaderName(note: Note, header: String): LiveData<Result<Note>>
     fun addNote(note: Note): LiveData<Result<Note>>
     fun getNoteById(id: String): LiveData<Note>
-    fun deleteNote(note: Note)
-
+    fun deleteNote(note: Note): LiveData<Boolean>
+    fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean>
 
 }

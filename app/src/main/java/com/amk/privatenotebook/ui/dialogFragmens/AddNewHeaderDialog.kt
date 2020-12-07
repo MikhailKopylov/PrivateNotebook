@@ -15,7 +15,7 @@ class AddNewHeaderDialog(private val onDialogListener: OnDialogListener) :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val view: View = inflater.inflate(R.layout.dialog_add_new_header, container, false)
         isCancelable = true

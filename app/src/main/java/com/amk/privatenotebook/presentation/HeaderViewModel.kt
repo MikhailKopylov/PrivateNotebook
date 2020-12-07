@@ -19,4 +19,7 @@ class HeaderViewModel(private val notesRepository: NotesRepository) : ViewModel(
         notesRepository.addNote(note)
     }
 
+    fun deleteNote(note: Note): LiveData<Boolean> = notesRepository.deleteNote(note)
+
+
 }

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.Subtopic
@@ -13,6 +15,7 @@ import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.presentation.SubtopicViewState
+import com.amk.privatenotebook.ui.ItemTouchHelperCallback
 import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import com.amk.privatenotebook.utils.hideFabOnScroll
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,8 +28,6 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
     private val binding: FragmentSubtopicBinding get() = _binding!!
 
     private val headerViewModel by viewModel<HeaderViewModel>()
-    private val subtopicViewModel by viewModel<SubtopicViewModel>()
-//    private val bodyViewModel by activity?.viewModel<BodyViewModel>() ?: viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,11 +43,10 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
 
         with(binding) {
             val adapter = SubtopicAdapter(this@SubtopicFragment)
-            binding.subtopicView.adapter = adapter
+            subtopicView.adapter = adapter
+            ItemTouchHelper(ItemTouchHelperCallback(adapter)).attachToRecyclerView(subtopicView)
 
-//            if (initNote()) {
             headerNameEditView.setText(note.headerName)
-//            }
             initSubtopicObserver(adapter)
 
             initBodyObserver(adapter)
@@ -75,7 +75,8 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
     }
 
     private fun initSubtopicObserver(adapter: SubtopicAdapter) {
-        subtopicViewModel.subtopicList().observe(viewLifecycleOwner) {
+        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>()?:viewModel()
+        subtopicViewModel.observableSubtopicList().observe(viewLifecycleOwner) {
             when (it) {
                 is SubtopicViewState.NotesList -> {
                     note = it.note
@@ -105,10 +106,15 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
         super.onPause()
         val newHeaderName = binding.headerNameEditView.text.toString()
         if (newHeaderName.isNotEmpty()) {
-            if (/*initNote() &&*/ note.headerName != newHeaderName) {
+            if ( note.headerName != newHeaderName) {
                 val newNote = note.copy(headerName = newHeaderName)
                 headerViewModel.addNote(newNote)
             }
         }
+    }
+
+    fun subtopicDelete(subtopic: Subtopic): LiveData<Boolean> {
+        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>()?:viewModel()
+        return subtopicViewModel.deleteSubtopic(subtopic)
     }
 }
