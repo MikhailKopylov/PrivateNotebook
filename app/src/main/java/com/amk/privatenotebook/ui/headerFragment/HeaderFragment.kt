@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.databinding.FragmentHeaderBinding
-import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.presentation.HeaderViewModel
 import com.amk.privatenotebook.presentation.HeaderViewState
 import com.amk.privatenotebook.presentation.SubtopicViewModel
