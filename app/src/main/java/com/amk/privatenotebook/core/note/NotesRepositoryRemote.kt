@@ -3,22 +3,20 @@ package com.amk.privatenotebook.core.note
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
-import com.amk.privatenotebook.core.database.provider.FireStoreProvider
+import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.core.database.interfaces.DataProvider
 
 
-object NotesRepositoryRemote : NotesRepository {
+class NotesRepositoryRemote(private val dataProvider: DataProvider) : NotesRepository {
 
-    val notesRepository: NotesRepository by lazy { NotesRepositoryRemote }
-    private val TAG = "${NotesRepositoryRemote::class.java.simpleName} :"
-
-    private val remoteDataProvider = FireStoreProvider()
+    private val TAG = "${dataProvider::class.java.simpleName} :"
 
     override fun notes(): LiveData<List<Note>> {
-        return remoteDataProvider.getAllNotes()
+        return dataProvider.getAllNotes()
     }
 
     override fun updateNote(note: Note): LiveData<Result<Note>> {
-        return remoteDataProvider.saveOrUpdateNote(note)
+        return dataProvider.saveOrUpdateNote(note)
     }
 
     override fun updateHeaderName(note: Note, header: String): LiveData<Result<Note>> {
@@ -31,12 +29,16 @@ object NotesRepositoryRemote : NotesRepository {
     }
 
     override fun getNoteById(id: String): LiveData<Note> =
-        MutableLiveData(remoteDataProvider.getAllNotes().value?.find { it.uuidNote == id })
+        MutableLiveData(dataProvider.getAllNotes().value?.find { it.uuidNote == id })
 
 
-    override fun deleteNote(note: Note) {
-        TODO("Not yet implemented")
-    }
+    override fun deleteNote(note: Note): LiveData<Boolean> =
+        dataProvider.deleteNote(note.uuidNote)
 
-    override fun getCurrentUser() = remoteDataProvider.getCurrentUser()
+    override fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean> =
+        dataProvider.deleteSubtopic(noteID, subtopic)
+
+
+
+    override fun getCurrentUser() = dataProvider.getCurrentUser()
 }

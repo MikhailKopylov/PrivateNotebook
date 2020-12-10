@@ -7,14 +7,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.amk.privatenotebook.R
+import com.amk.privatenotebook.presentation.BodyViewModel
 import com.amk.privatenotebook.ui.headerFragment.HeaderFragment
 import com.amk.privatenotebook.ui.splashActivity.SplashActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.stopKoin
 
 
 class MainActivity : AppCompatActivity(), LogoutDialog.LogoutListener {
+
 
     private val onNavigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener { item ->

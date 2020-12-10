@@ -8,31 +8,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amk.privatenotebook.R
-import com.amk.privatenotebook.core.note.NotesRepositoryRemote.notesRepository
 import com.amk.privatenotebook.exeptions.NoAuthException
 import com.amk.privatenotebook.presentation.SplashViewModel
 import com.amk.privatenotebook.presentation.SplashViewState
 import com.amk.privatenotebook.ui.mainActivity.MainActivity
 import com.firebase.ui.auth.AuthUI
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val RC_SIGN_IN = 458
 
 class SplashActivity : AppCompatActivity() {
 
-    private val viewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SplashViewModel(notesRepository) as T
-            }
-        }).get(
-            SplashViewModel::class.java
-        )
-    }
+    private val viewModel by viewModel<SplashViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
 
         viewModel.observeViewState().observe(this) {
             when (it) {

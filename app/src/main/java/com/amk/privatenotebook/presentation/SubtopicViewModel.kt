@@ -1,20 +1,28 @@
 package com.amk.privatenotebook.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.amk.privatenotebook.core.Note
+import androidx.lifecycle.map
+import com.amk.privatenotebook.core.Subtopic
+import com.amk.privatenotebook.core.note.NotesRepository
 
-class SubtopicViewModel : ViewModel() {
+class SubtopicViewModel(private val notesRepository: NotesRepository) : ViewModel() {
 
-    val subtopicList = MutableLiveData<SubtopicViewState>()
-    fun subtopicList():LiveData<SubtopicViewState> = subtopicList
-    fun selectNote(note: Note) {
-        subtopicList.value =
-            if (note.getSubTopicList()
-                    .isEmpty()
-            ) SubtopicViewState.EMPTY(note) else SubtopicViewState.NotesList(
-                note
-            )
+
+    private lateinit var noteId: String
+    fun selectNote(noteId: String) {
+        this.noteId = noteId
     }
+
+    fun observableSubtopicList(): LiveData<SubtopicViewState> =
+        notesRepository.getNoteById(noteId).map {
+            if (it.getSubTopicList()
+                    .isEmpty()
+            ) SubtopicViewState.EMPTY(it) else SubtopicViewState.NotesList(it)
+        }
+
+
+    fun deleteSubtopic(subtopic: Subtopic): LiveData<Boolean> =
+        notesRepository.deleteSubtopic(subtopic.noteID, subtopic)
+
 }

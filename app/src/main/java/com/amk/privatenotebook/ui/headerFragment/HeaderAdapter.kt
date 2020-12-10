@@ -2,13 +2,15 @@ package com.amk.privatenotebook.ui.headerFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
+import com.amk.privatenotebook.databinding.ItemTopicBinding
+import com.amk.privatenotebook.ui.ItemTouchHelperAdapter
 import com.amk.privatenotebook.ui.subtopicFragment.SubtopicFragment
-import kotlinx.android.synthetic.main.item_topic.view.*
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note>() {
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -22,7 +24,8 @@ val DIFF_UTIL: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note
 }
 
 class TopicAdapter(val fragment: HeaderFragment) :
-    ListAdapter<Note, TopicAdapter.TopicViewHolder>(DIFF_UTIL) {
+    ListAdapter<Note, TopicAdapter.TopicViewHolder>(DIFF_UTIL),
+    ItemTouchHelperAdapter {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
@@ -33,26 +36,37 @@ class TopicAdapter(val fragment: HeaderFragment) :
         holder.bind(getItem(position))
     }
 
+    override fun onItemDismiss(position: Int) {
+        fragment.onNoteDelete(getItem(position)).observe(fragment) {
+            if (!it) {
+                Toast.makeText(fragment.context, "Delete note failed!!!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
 
-    inner class TopicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_topic, parent, false)
-    ) {
+    inner class TopicViewHolder(
+        parent: ViewGroup,
+        private val binding: ItemTopicBinding = ItemTopicBinding.inflate(
+            LayoutInflater.from(parent.context)
+        )
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Note) {
             with(item) {
-                itemView.topic_textView.text = headerName
-                itemView.setOnClickListener {
-                    fragment.selectNone(item)
-                    runFragment()
+                binding.topicTextView.text = headerName
+                binding.root.setOnClickListener {
+                    fragment.selectNote(item)
+                    runFragment(item)
                 }
             }
         }
 
-        private fun runFragment() {
+        private fun runFragment(note: Note) {
             val activity = fragment.activity ?: return
             activity.supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, SubtopicFragment())
+                .replace(R.id.container, SubtopicFragment(note))
                 .addToBackStack("subtitle")
                 .commit()
         }

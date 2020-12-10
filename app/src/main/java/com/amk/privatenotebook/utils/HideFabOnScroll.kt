@@ -2,7 +2,6 @@ package com.amk.privatenotebook.utils
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_topic.*
 
 fun hideFabOnScroll(recyclerView: RecyclerView, fab:FloatingActionButton) {
     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
