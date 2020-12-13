@@ -15,9 +15,9 @@ class HeaderViewModel(private val notesRepository: NotesRepository) : ViewModel(
             if (it.isEmpty()) HeaderViewState.EMPTY else HeaderViewState.NotesList(it)
         }
 
-    fun addNote(note: Note) {
+    fun addNote(note: Note):LiveData<Result<Note>> =
         notesRepository.addNote(note)
-    }
+
 
     fun deleteNote(note: Note): LiveData<Boolean> = notesRepository.deleteNote(note)
 

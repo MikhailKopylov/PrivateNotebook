@@ -1,6 +1,5 @@
 package com.amk.privatenotebook.core.database.providers
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
@@ -17,15 +16,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 private const val NOTES_COLLECTION = "notes_collection"
 private const val USERS_COLLECTION = "users_collection"
 
-class FireStoreProvider : DataProvider {
+class FireStoreProvider(private val db:FirebaseFirestore, private val auth: FirebaseAuth) : DataProvider {
 
     private val TAG = "${FireStoreProvider::class.java.simpleName} :"
 
-    private val db = FirebaseFirestore.getInstance()
     private val result = MutableLiveData<List<Note>>()
 
     private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
+        get() = auth.currentUser
 
     private var isNotSubscribeOnDbChange = true
 
@@ -51,7 +49,7 @@ class FireStoreProvider : DataProvider {
                     result.value = notes
                 }
             } catch (e: Throwable) {
-                Log.d(TAG, "Error loading list note , message: ${e.message}")
+//                Log.d(TAG, "Error loading list note , message: ${e.message}")
             }
         }
         isNotSubscribeOnDbChange = false
@@ -75,10 +73,8 @@ class FireStoreProvider : DataProvider {
             try {
                 getUserNotesCollection().document(note.uuidNote)
                     .set(note).addOnSuccessListener {
-                        Log.d(TAG, "Note $note is saved")
                         value = Result.success(note)
                     }.addOnFailureListener {
-                        Log.d(TAG, "Error saving note $note, message: ${it.message}")
                         throw it
                     }
             } catch (e: Throwable) {

@@ -11,6 +11,8 @@ import com.amk.privatenotebook.presentation.SubtopicViewModel
 import com.amk.privatenotebook.ui.ItemTouchHelperAdapter
 import com.amk.privatenotebook.ui.headerFragment.HeaderFragment
 import com.amk.privatenotebook.ui.headerFragment.TopicAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.bind
@@ -20,8 +22,10 @@ object DependencyGraph {
 
     private val repositoryModule by lazy {
         module {
+            single { FirebaseFirestore.getInstance() }
+            single { FirebaseAuth.getInstance() }
+            single { FireStoreProvider(get(), get()) } bind DataProvider::class
             single { NotesRepositoryRemote(get()) } bind NotesRepository::class
-            single { FireStoreProvider() } bind DataProvider::class
         }
     }
 

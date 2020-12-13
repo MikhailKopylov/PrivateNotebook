@@ -30,5 +30,4 @@ class BodyViewModel(private val notesRepository: NotesRepository) : ViewModel() 
         return notesRepository.getNoteById(noteID)
     }
 
-
 }

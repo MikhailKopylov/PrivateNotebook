@@ -13,7 +13,7 @@ data class Note(
 ) : Parcelable {
 
     fun addSubtopic(subtopic: Subtopic) {
-        subTopicList.add(subtopic)
+        subTopicList.add(subtopic.copy(noteID = uuidNote))
     }
 
     fun updateSubtopic(newSubtopic: Subtopic) {
