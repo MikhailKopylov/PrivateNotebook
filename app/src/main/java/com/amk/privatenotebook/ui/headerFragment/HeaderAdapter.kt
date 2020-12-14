@@ -11,6 +11,7 @@ import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.databinding.ItemTopicBinding
 import com.amk.privatenotebook.ui.ItemTouchHelperAdapter
 import com.amk.privatenotebook.ui.subtopicFragment.SubtopicFragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Note> = object : DiffUtil.ItemCallback<Note>() {
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -36,13 +37,10 @@ class TopicAdapter(val fragment: HeaderFragment) :
         holder.bind(getItem(position))
     }
 
+    @ExperimentalCoroutinesApi
     override fun onItemDismiss(position: Int) {
-        fragment.onNoteDelete(getItem(position)).observe(fragment) {
-            if (!it) {
-                Toast.makeText(fragment.context, "Delete note failed!!!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
+        fragment.onNoteDelete(getItem(position))
+
     }
 
     inner class TopicViewHolder(

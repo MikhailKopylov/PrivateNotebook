@@ -1,70 +1,56 @@
 package com.amk.privatenotebook.core.note
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.user.User
+import com.amk.privatenotebook.exeptions.NoFindNoteException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class NotesRepositorySimple : NotesRepository {
     private val privateNotes: MutableList<Note> = initNotes()
 
-    override fun notes(): LiveData<List<Note>> {
-        return MutableLiveData(privateNotes.toList())
+    override fun notes(): Flow<List<Note>> {
+        return MutableStateFlow(privateNotes.toList())
     }
 
-    override fun updateNote(note: Note): LiveData<Result<Note>> {
-        val result = MutableLiveData<Result<Note>>()
+    override suspend fun updateNote(note: Note): Note {
+
         privateNotes.find { it.uuidNote == note.uuidNote }?.let {
-            if (it == note) {
-                result.value = Result.success(note)
-            }
             privateNotes.remove(it)
         }
         privateNotes.add(note)
-        result.value = Result.success(note)
-        return result
+        return note
     }
 
-    override fun updateHeaderName(note: Note, header: String): LiveData<Result<Note>> {
-        val result = MutableLiveData<Result<Note>>()
+    override suspend fun updateHeaderName(note: Note, header: String): Note {
         val newNote = Note(header, note.uuidNote)
         newNote.addSubtopicList(note.getSubTopicList())
         privateNotes.find { it.uuidNote == newNote.uuidNote }?.let {
-            if (it == newNote) {
-                result.value = Result.success(note)
-            }
             privateNotes.remove(it)
         }
-        result.value = Result.success(note)
         privateNotes.add(newNote)
-        return result
+        return newNote
     }
 
-    override fun addNote(note: Note): LiveData<Result<Note>> {
-        val result = MutableLiveData<Result<Note>>()
+    override suspend fun addNote(note: Note): Note {
         privateNotes.add(note)
-        result.value = Result.success(note)
-        return result
+        return note
     }
 
-    override fun getNoteById(id: String): LiveData<Note> {
-        val result = MutableLiveData<Note>()
-
-        result.value = privateNotes.find { it.uuidNote == id }
-        return result
+    override fun getNoteById(id: String): Note {
+        return privateNotes.find { it.uuidNote == id } ?: throw NoFindNoteException()
     }
 
 
-    override fun deleteNote(note: Note): LiveData<Boolean> =
-        MutableLiveData<Boolean>().apply {
-            value = privateNotes.remove(note)
-        }
+    override suspend fun deleteNote(note: Note): Boolean =
+        privateNotes.remove(note)
 
-    override fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean> =
-        MutableLiveData<Boolean>().apply { privateNotes.find { (it.uuidNote == noteID) }?.deleteSubtopic(subtopic)}
-
+    override suspend fun deleteSubtopic(noteID: String, subtopic: Subtopic): Boolean =
+        privateNotes.find { (it.uuidNote == noteID) }?.deleteSubtopic(subtopic)
+            ?: throw NoFindNoteException()
 
 
     override fun getCurrentUser(): LiveData<User?> {

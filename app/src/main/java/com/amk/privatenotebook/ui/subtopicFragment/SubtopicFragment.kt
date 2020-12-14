@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
@@ -18,6 +17,7 @@ import com.amk.privatenotebook.presentation.SubtopicViewState
 import com.amk.privatenotebook.ui.ItemTouchHelperCallback
 import com.amk.privatenotebook.ui.bodyFragment.BodyFragment
 import com.amk.privatenotebook.utils.hideFabOnScroll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -75,7 +75,7 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
     }
 
     private fun initSubtopicObserver(adapter: SubtopicAdapter) {
-        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>()?:viewModel()
+        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>() ?: viewModel()
         subtopicViewModel.observableSubtopicList().observe(viewLifecycleOwner) {
             when (it) {
                 is SubtopicViewState.NotesList -> {
@@ -106,15 +106,16 @@ class SubtopicFragment(private var note: Note) : Fragment(R.layout.fragment_subt
         super.onPause()
         val newHeaderName = binding.headerNameEditView.text.toString()
         if (newHeaderName.isNotEmpty()) {
-            if ( note.headerName != newHeaderName) {
+            if (note.headerName != newHeaderName) {
                 val newNote = note.copy(headerName = newHeaderName)
                 headerViewModel.addNote(newNote)
             }
         }
     }
 
-    fun subtopicDelete(subtopic: Subtopic): LiveData<Boolean> {
-        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>()?:viewModel()
-        return subtopicViewModel.deleteSubtopic(subtopic)
+    @ExperimentalCoroutinesApi
+    fun subtopicDelete(subtopic: Subtopic) {
+        val subtopicViewModel by activity?.viewModel<SubtopicViewModel>() ?: viewModel()
+        subtopicViewModel.deleteSubtopic(subtopic)
     }
 }
