@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.amk.privatenotebook.R
 import com.amk.privatenotebook.core.Note
@@ -17,6 +16,7 @@ import com.amk.privatenotebook.ui.ItemTouchHelperCallback
 import com.amk.privatenotebook.ui.dialogFragmens.AddNewHeaderDialog
 import com.amk.privatenotebook.ui.dialogFragmens.OnDialogListener
 import com.amk.privatenotebook.utils.hideFabOnScroll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -91,9 +91,10 @@ class HeaderFragment : Fragment(R.layout.fragment_header) {
         _binding = null
     }
 
-    fun onNoteDelete(note: Note): LiveData<Boolean> {
+    @ExperimentalCoroutinesApi
+    fun onNoteDelete(note: Note) {
         val headerViewModel by (activity)?.viewModel<HeaderViewModel>() ?: viewModel()
-        return headerViewModel.deleteNote(note)
+        headerViewModel.deleteNote(note)
     }
 
 }

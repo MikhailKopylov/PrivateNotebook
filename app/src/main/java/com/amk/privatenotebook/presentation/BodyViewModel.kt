@@ -3,9 +3,10 @@ package com.amk.privatenotebook.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.amk.privatenotebook.core.Note
+import androidx.lifecycle.viewModelScope
 import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.note.NotesRepository
+import kotlinx.coroutines.launch
 
 class BodyViewModel(private val notesRepository: NotesRepository) : ViewModel() {
 
@@ -16,18 +17,15 @@ class BodyViewModel(private val notesRepository: NotesRepository) : ViewModel() 
         subtopicLiveData.value = subtopic
     }
 
-    fun onUpdate(note: Note, subtopicName: String, body: String) {
-        val noteID = note.uuidNote
-        val uuidSubtopic = subtopicLiveData().value?.uuidSubTopic ?: return
-        val subtopic = Subtopic(noteID, subtopicName, body, uuidSubtopic)
-        subtopicLiveData.value = subtopic
-        note.updateSubtopic(subtopic)
-        notesRepository.updateNote(note)
+    fun onUpdate(subtopicName: String, body: String) {
+        viewModelScope.launch {
+            val noteID = subtopicLiveData.value?.noteID ?: return@launch
+            val note = notesRepository.getNoteById(noteID)
+            val uuidSubtopic: String = subtopicLiveData().value?.uuidSubTopic ?: return@launch
+            val subtopic = Subtopic(noteID, subtopicName, body, uuidSubtopic)
+            subtopicLiveData.value = subtopic
+            note.updateSubtopic(subtopic)
+            notesRepository.updateNote(note)
+        }
     }
-
-    fun getNoteById(): LiveData<Note> {
-        val noteID = subtopicLiveData().value?.noteID ?: ""
-        return notesRepository.getNoteById(noteID)
-    }
-
 }

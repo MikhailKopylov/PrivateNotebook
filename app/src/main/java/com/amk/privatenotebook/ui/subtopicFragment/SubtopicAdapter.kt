@@ -2,18 +2,19 @@ package com.amk.privatenotebook.ui.subtopicFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.databinding.ItemSubtopicBinding
 import com.amk.privatenotebook.ui.ItemTouchHelperAdapter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 val DIFF_UTIL: DiffUtil.ItemCallback<Subtopic> = object : DiffUtil.ItemCallback<Subtopic>() {
     override fun areItemsTheSame(oldItem: Subtopic, newItem: Subtopic): Boolean {
         return oldItem == newItem
     }
+
     override fun areContentsTheSame(oldItem: Subtopic, newItem: Subtopic): Boolean {
         return oldItem.subtopicName == newItem.subtopicName
     }
@@ -32,15 +33,9 @@ class SubtopicAdapter(val fragment: SubtopicFragment) :
         holder.bind(getItem(position))
     }
 
+    @ExperimentalCoroutinesApi
     override fun onItemDismiss(position: Int) {
-        fragment.subtopicDelete(getItem(position)).observe(fragment){
-            if(!it){
-                Toast.makeText(fragment.context, "Delete subtopic failed!!!", Toast.LENGTH_SHORT)
-                    .show()
-            } else{
-                notifyItemRemoved(position)
-            }
-        }
+        fragment.subtopicDelete(getItem(position))
     }
 
     inner class SubtopicViewHolder(
@@ -51,7 +46,6 @@ class SubtopicAdapter(val fragment: SubtopicFragment) :
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-
         fun bind(item: Subtopic) {
             with(item) {
                 binding.subtopicEditText.text = subtopicName
@@ -61,8 +55,6 @@ class SubtopicAdapter(val fragment: SubtopicFragment) :
                 }
             }
         }
-
-
     }
 
 

@@ -30,9 +30,7 @@ data class Note(
         subTopicList.addAll(subtopicList)
     }
 
-    fun deleteSubtopic(subtopic: Subtopic) {
-        subTopicList.remove(subtopic)
-    }
+    fun deleteSubtopic(subtopic: Subtopic): Boolean = subTopicList.remove(subtopic)
 }
 
 @Parcelize

@@ -1,18 +1,18 @@
 package com.amk.privatenotebook.core.note
 
-import androidx.lifecycle.LiveData
 import com.amk.privatenotebook.core.Note
 import com.amk.privatenotebook.core.Subtopic
 import com.amk.privatenotebook.core.database.interfaces.UserDAO
+import kotlinx.coroutines.flow.Flow
 
 interface NotesRepository : UserDAO {
 
-    fun notes(): LiveData<List<Note>>
-    fun updateNote(note: Note): LiveData<Result<Note>>
-    fun updateHeaderName(note: Note, header: String): LiveData<Result<Note>>
-    fun addNote(note: Note): LiveData<Result<Note>>
-    fun getNoteById(id: String): LiveData<Note>
-    fun deleteNote(note: Note): LiveData<Boolean>
-    fun deleteSubtopic(noteID: String, subtopic: Subtopic): LiveData<Boolean>
+    fun notes(): Flow<List<Note>>
+    suspend fun updateNote(note: Note): Note
+    suspend fun updateHeaderName(note: Note, header: String): Note
+    suspend fun addNote(note: Note): Note
+    fun getNoteById(id: String): Note
+    suspend fun deleteNote(note: Note): Boolean
+    suspend fun deleteSubtopic(noteID: String, subtopic: Subtopic): Boolean
 
 }

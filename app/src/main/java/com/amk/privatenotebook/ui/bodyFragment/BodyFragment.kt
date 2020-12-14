@@ -42,11 +42,7 @@ class BodyFragment : Fragment() {
             val subtopicName = subtopicEditText.text.toString()
             val body = bodyEditText.text.toString()
             val toBodyViewModel by (activity)?.viewModel<BodyViewModel>() ?: viewModel()
-            toBodyViewModel.getNoteById().observe(viewLifecycleOwner) {
-                if (it != null) {
-                    toBodyViewModel.onUpdate(it, subtopicName, body)
-                }
-            }
+            toBodyViewModel.onUpdate(subtopicName, body)
         }
     }
 
